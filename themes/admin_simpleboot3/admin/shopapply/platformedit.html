@@ -1,0 +1,218 @@
+<include file="public@header" />
+<style type="text/css">
+	.red_tips{
+		color: #F00;
+	}
+</style>
+<link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:url('Shopapply/index')}">店铺申请列表</a></li>
+			<li class="active"><a >平台自营店铺信息</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('Shopapply/platformeditPost')}">
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>姓名</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="username" value="{$platform_info['username']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>身份证号</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="cardno" value="{$platform_info['cardno']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>经营者联系人</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="contact" value="{$platform_info['contact']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>经营者联系电话</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="phone" value="{$platform_info['phone']}">
+				</div>
+			</div>
+            
+            <!-- <div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>经营者所在地区</label>
+				<div class="col-md-6 col-sm-10">
+                    <div class="layui-form">
+				        <div class="layui-form-item" id="area-picker">
+				            
+				            <div class="layui-input-inline" style="width: 200px;">
+				                <select name="province" class="province-selector" data-value="{$platform_info['province']}" lay-filter="province-1">
+				                    <option value="">请选择省</option>
+				                </select>
+				            </div>
+				            <div class="layui-input-inline" style="width: 200px;">
+				                <select name="city" class="city-selector" data-value="{$platform_info['city']}" lay-filter="city-1">
+				                    <option value="">请选择市</option>
+				                </select>
+				            </div>
+				            <div class="layui-input-inline" style="width: 200px;">
+				                <select name="area" class="county-selector" data-value="{$platform_info['area']}" lay-filter="county-1">
+				                    <option value="">请选择区</option>
+				                </select>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+			</div> -->
+
+			<!-- <div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>经营者详细地址</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="address" value="{$platform_info['address']}">
+				</div>
+			</div> -->
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>客服电话</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="service_phone" value="{$platform_info['service_phone']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>退货收货人手机号</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="receiver_phone" value="{$platform_info['receiver_phone']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>退货收货人地区</label>
+				<div class="col-md-6 col-sm-10">
+                    <div class="layui-form">
+				        <div class="layui-form-item" id="receive_area-picker">
+				            
+				            <div class="layui-input-inline" style="width: 200px;">
+				                <select name="receiver_province" class="province-selector" data-value="{$platform_info['receiver_province']}" lay-filter="province-1">
+				                    <option value="">请选择省</option>
+				                </select>
+				            </div>
+				            <div class="layui-input-inline" style="width: 200px;">
+				                <select name="receiver_city" class="city-selector" data-value="{$platform_info['receiver_city']}" lay-filter="city-1">
+				                    <option value="">请选择市</option>
+				                </select>
+				            </div>
+				            <div class="layui-input-inline" style="width: 200px;">
+				                <select name="receiver_area" class="county-selector" data-value="{$platform_info['receiver_area']}" lay-filter="county-1">
+				                    <option value="">请选择区</option>
+				                </select>
+				            </div>
+				        </div>
+				    </div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>退货收货人详细地址</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="receiver_address" value="{$platform_info['receiver_address']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>退货收货人</label>
+				<div class="col-md-6 col-sm-10">
+                    <input type="text" class="form-control" name="receiver" value="{$platform_info['receiver']}">
+				</div>
+			</div>
+
+			<div class="form-group">
+                <label for="input-certificate" class="col-sm-2 control-label"><span class="form-required">*</span>营业执照</label>
+                <div class="col-md-6 col-sm-10">
+                    <input type="hidden" name="certificate" id="thumbnail1" value="{$platform_info['certificate']|default=''}">
+                    <a href="javascript:uploadOneImage('图片上传','#thumbnail1');">
+                        <if condition="empty($platform_info.certificate)">
+                        <img src="__TMPL__/public/assets/images/default-thumbnail.png"
+                                 id="thumbnail1-preview"
+                                 style="cursor: pointer;max-width:150px;max-height:150px;"/>
+                        <else/>
+                        <img src="{:get_upload_path($platform_info.certificate)}"
+                             id="thumbnail1-preview"
+                             style="cursor: pointer;max-width:150px;max-height:150px;"/>
+                        </if>
+                    </a>
+                    <input type="button" class="btn btn-sm btn-cancel-thumbnail1" value="取消图片">
+                </div>
+            </div>
+
+			<div class="form-group">
+                <label for="input-other" class="col-sm-2 control-label"><span class="form-required">*</span>其他证件</label>
+                <div class="col-md-6 col-sm-10">
+                    <input type="hidden" name="other" id="thumbnail2" value="{$platform_info['other']|default=''}">
+                    <a href="javascript:uploadOneImage('图片上传','#thumbnail2');">
+                        <if condition="empty($platform_info.other)">
+                        <img src="__TMPL__/public/assets/images/default-thumbnail.png"
+                                 id="thumbnail2-preview"
+                                 style="cursor: pointer;max-width:150px;max-height:150px;"/>
+                        <else/>
+                        <img src="{:get_upload_path($platform_info.other)}"
+                             id="thumbnail2-preview"
+                             style="cursor: pointer;max-width:150px;max-height:150px;"/>
+                        </if>
+                    </a>
+                    <input type="button" class="btn btn-sm btn-cancel-thumbnail2" value="取消图片">
+                </div>
+            </div>
+            
+            <div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<input type="hidden" name="uid" value="{$platform_info.uid}" />
+					<input type="hidden" name="certificate_old" value="{$platform_info.certificate}" />
+					<input type="hidden" name="other_old" value="{$platform_info.other}" />
+					<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('EDIT')}</button>
+					<a class="btn btn-default" href="{:url('Shopapply/index')}">{:lang('BACK')}</a>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+	<script src="__STATIC__/layui/layui.js"></script>
+    <script>
+        //配置插件目录
+        layui.config({
+            base: '__STATIC__/mods/'
+            , version: '1.0'
+        });
+        //一般直接写在一个js文件中
+        
+
+        layui.use(['layer', 'form', 'layarea'], function () {
+            var layer = layui.layer
+                , form = layui.form
+                , layarea = layui.layarea;
+
+            layarea.render({
+                elem: '#receive_area-picker',
+                change: function (res) {
+                    //选择结果
+                    console.log(res);
+                }
+            });
+
+        });
+
+        $('.btn-cancel-thumbnail1').click(function () {
+            $('#thumbnail1-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+            $('#thumbnail1').val('');
+        });
+        $('.btn-cancel-thumbnail2').click(function () {
+            $('#thumbnail2-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+            $('#thumbnail2').val('');
+        });
+    </script>
+</body>
+</html>

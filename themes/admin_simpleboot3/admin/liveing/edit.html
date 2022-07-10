@@ -1,0 +1,117 @@
+
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:url('Liveing/index')}">直播列表</a></li>
+			<li class="active"><a >{:lang('EDIT')}</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('Liveing/editPost')}">
+            <div class="form-group">
+				<label for="input-uid" class="col-sm-2 control-label"><span class="form-required">*</span>用户ID</label>
+				<div class="col-md-6 col-sm-10">
+					<input type="text" class="form-control" id="input-uid" name="uid" value="{$data['uid']}" readonly>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="input-live_type" class="col-sm-2 control-label"><span class="form-required">*</span>直播类型</label>
+				<div class="col-md-6 col-sm-10">
+                    <select class="form-control" name="live_type" id="live_type">
+                        <option value="0" <eq name="data['live_type']" value="0">selected</eq>>直播间</option>
+                        <option value="1" <eq name="data['live_type']" value="1">selected</eq>>语音聊天室</option>
+                    </select>
+				</div>
+			</div>
+            
+            <div class="form-group" id="liveclass" <eq name="data['live_type']" value="1">style="display:none;"</eq>>
+				<label for="input-type" class="col-sm-2 control-label"><span class="form-required">*</span>直播分类</label>
+				<div class="col-md-6 col-sm-10">
+                    <select class="form-control" name="liveclassid">
+                    	<option value="0" <eq name="data['liveclassid']" value="0">selected</eq>>默认分类</option>
+                        <volist name="liveclass" id="v">
+                        <option value="{$key}" <if condition="$data['liveclassid'] gt 0 and $data['liveclassid'] eq $key">selected</if>>{$v}</option>
+                        </volist>
+                    </select>
+				</div>
+			</div>
+            
+            <div class="form-group" id="type" <eq name="data['live_type']" value="1">style="display:none;"</eq>>
+				<label for="input-type" class="col-sm-2 control-label"><span class="form-required">*</span>房间类型</label>
+				<div class="col-md-6 col-sm-10">
+                    <select class="form-control" name="type" id="cdn">
+                        <volist name="type" id="v">
+                        <option value="{$key}" <eq name="data['type']" value="$key">selected</eq>>{$v}</option>
+                        </volist>
+                    </select>
+				</div>
+			</div>
+            <if condition="$data['type'] eq '0' && $data['live_type'] eq '0'">
+            	<div class="form-group" id="cdn_switch_1"  style="display:none;">
+            <else />
+            	<div class="form-group" id="cdn_switch_1"  style="display:none;">
+        	</if>
+
+				<label for="input-type_val" class="col-sm-2 control-label"><span class="form-required">*</span>密码或价格</label>
+				<div class="col-md-6 col-sm-10">
+					<input type="text" class="form-control" id="input-type_val" name="type_val" value="{$data['type_val']}">
+				</div>
+			</div>
+            
+            
+            <div class="form-group">
+				<label for="input-pull" class="col-sm-2 control-label"><span class="form-required">*</span>视频地址</label>
+				<div class="col-md-6 col-sm-10">
+					<input type="text" class="form-control" id="input-pull" name="pull" value="{$data['pull']}">视频格式：MP4
+				</div>
+			</div>
+            
+            <div class="form-group" id="anyway" <eq name="data['live_type']" value="1">style="display:none;"</eq>>
+				<label for="input-words" class="col-sm-2 control-label"><span class="form-required">*</span>视频类型</label>
+				<div class="col-md-6 col-sm-10">
+					<select class="form-control" name="anyway">
+                        <option value="0" >竖屏</option>
+                        <option value="1" <eq name="data['anyway']" value="1">selected</eq>>横屏</option>
+                    </select>
+				</div>
+			</div>
+            
+            <div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('EDIT')}</button>
+					<a class="btn btn-default" href="{:url('Liveing/index')}">{:lang('BACK')}</a>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+    <script type="text/javascript">
+    (function(){
+		$("#cdn").on('change',function(){
+			var v=$(this).val();
+			var b=$("#cdn_switch_1");
+			if(v==0){
+				b.hide();
+				$("#input-type_val").val('');
+			}else{
+				b.show();
+			}
+		});
+		$("#live_type").on('change',function(){
+			var v=$(this).val();
+			if(v==0){
+				$("#liveclass").show();
+				$("#type").show();
+				$("#anyway").show();
+			}else{
+				$("#liveclass").hide();
+				$("#type").hide();
+				$("#anyway").hide();
+			}
+		});
+	})()
+    </script>
+</body>
+</html>

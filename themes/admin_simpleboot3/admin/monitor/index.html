@@ -1,0 +1,166 @@
+<include file="public@header" />
+<style>
+li{
+    list-style:none;
+}
+.js-ajax-form li 
+{
+	list-style:none;
+	width:160px;
+	height:390px;
+	border: 1px solid #C2D1D8;
+	float:left;
+	margin:10px;			
+}
+.js-ajax-form li button
+{
+	margin-left:30px;
+}
+.js-ajax-form li span
+{
+	display:block;
+	text-align:center
+}
+.js-ajax-form li .name
+{
+	width:157px;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+.full_btn
+{
+	float: left;
+  height: 30px;
+  padding: 0 18px;
+  background: #1dccaa;
+  border-radius: 4px;
+  line-height: 30px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 10px;
+}
+.full_btn:hover
+{
+	background: #356f64;
+	color: #fff;
+	text-decoration:none;
+}
+.xgplayer-start svg{
+    margin: 0 !important;
+}
+.voice_live_bg{
+  position: relative;
+  left: 0;
+  top: 0;
+  background: url(__STATIC__/admin/images/monitor/voice_live_bg.png) no-repeat;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.live_style{
+  width:100%;
+  height:83%;
+}
+
+.voice_live_style{
+  width:100%;
+  height:83%;
+  position: relative;
+  top: -280px;
+  left: 0;
+  z-index: -2;
+}
+
+</style>
+</head>
+<body>
+	<script src="__STATIC__/js/admin.js"></script>
+	<script src="__STATIC__/home/js/socket.io.js"></script>
+	<script src="__STATIC__/xigua/xgplayer.js?t=1610159896" type="text/javascript"></script>
+  <script src="__STATIC__/xigua/index.js?t=1610159896" type="text/javascript"></script>
+    <script src="__STATIC__/xigua/xgplayer-flv.js?t=1610159896" type="text/javascript"></script>
+    <script src="__STATIC__/xigua/player.js?t=1586844774" type="text/javascript"></script>
+    
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a >监控</a></li>
+		</ul>
+		<form method="post" class="js-ajax-form" >
+            <ul>
+                <foreach name="lists" item="v">
+	    		<li class="mytd">
+					<span>开播时长:<?php 
+								$times = time()-$v['showid'];
+								$result = '';
+								$hour = floor($times/3600);
+                                $minute = floor(($times-3600 * $hour)/60);
+                                $second = floor((($times-3600 * $hour) - 60 * $minute) % 60);
+                                $result = $hour.':'.$minute.':'.$second;
+                                echo  $result;?>
+                     </span>
+                     <div style="width: 158px;height: 280px;">
+                        <!-- 语音聊天室 -->
+                        <if condition="$v['live_type'] neq '0'">
+                          <div class="voice_live_bg"></div>
+                        </if>
+                        <div  id="<?php echo $v['uid'];?>" <if condition="$v['live_type'] eq '0'"> class="live_style" <else />class="voice_live_style"</if>></div>
+                     </div>
+                    <div>
+                      <span class="name">主播:<?php echo $v['userinfo']['user_nicename'];?></span>
+                      <span>房间号:<?php echo $v['uid'];?></span>
+                      <if condition="$v['live_type'] eq 0">
+                      <span>视频直播</span>
+                      <else />
+                      <span>语音聊天室</span>
+                      </if>
+                      <div style="text-align:center;">
+                          <a  onclick="closeRoom('<?php echo $v['uid'];?>')" class="btn btn-xs btn-warning">关闭</a>
+                          <!-- <a  onclick="fullRoom('<?php echo $v['uid'];?>')" class="full_btn mybtn">大屏</a> -->
+                      </div>
+                    </div>
+                </li>
+                <script type="text/javascript">
+                    (function(){
+                        xgPlays('{$v['uid']}','{$v['url']}');
+                    })()
+                </script>				
+                </foreach>
+            </ul>
+
+		</form>
+        <div style="clear:both;"></div>
+        <div class="pagination"  style="clear:both">{$page}</div>
+	</div>
+
+    <script type="text/javascript">
+         var socket = new io("{$config['chatserver']}");
+        function closeRoom(roomId){
+          var data2 = {"token":"1234567","roomnum":roomId};
+                $.ajax({
+                    async: false,
+                    url: '/admin/Monitor/stopRoom',
+                    data:{uid:roomId},
+                    dataType: "json",
+                    success: function(data){
+                        console.log(data);
+                        if(data.status ==0){
+                            alert(data.info);
+                        }else{
+                            socket.emit("superadminaction",data2);
+                            alert("房间已关闭");
+                            location.reload();
+                        }
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown){
+                        alert('关闭失败，请重试');
+                    }
+                });
+            }
+    </script>
+</body>
+</html>

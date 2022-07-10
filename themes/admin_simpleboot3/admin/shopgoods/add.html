@@ -1,0 +1,451 @@
+<include file="public@header" />
+<style type="text/css">
+	.goods_thumbs_list{
+		width: 252px;
+		margin-bottom: 10px;
+	}
+	.goods_thumbs_list img{
+		cursor: pointer;
+		max-width:150px;
+		max-height:150px;
+	}
+	.goods_thumbs_list_button{
+		float: right;
+		margin-top: 65px;
+	}
+	.goods_thumbs_area{
+		width: 60%;
+		float: left;
+		height: auto;
+	}
+	.spec_lists_del{
+		margin-left: 30px;
+	}
+	.clearboth{
+		clear: both;
+	}
+</style>
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:url('Shopgoods/index')}">商品列表</a></li>
+			<li class="active"><a >平台自营商品添加</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('Shopgoods/addPost')}">
+            
+            <div class="form-group">
+				<label for="input-name" class="col-sm-2 control-label"><span class="form-required">*</span>商品标题:</label>
+				<div class="col-md-6 col-sm-10">
+					<input type="text" class="form-control" name="name" id="input-name" maxlength="15" placeholder="请填写产品词、属性词、营销词等，不超过15个字">
+				</div>
+			</div>
+
+
+				<div class="form-group">
+					<label for="input-one_class" class="col-sm-2 control-label"><span class="form-required">*</span>商品所属分类:</label>
+					<div class="col-md-6 col-sm-10">
+						<select name="one_classid" id="one_class">
+							<option value="0">--请选择一级分类--</option>
+							<volist name="one_classlist" id="vo">
+								<option value="{$vo['gc_id']}">{$vo['gc_name']}</option>
+							</volist>
+						</select>
+						<select name="two_classid" id="two_class">
+							<option value="0">--请选择二级分类--</option>
+						</select>
+						<select name="three_classid" id="three_class">
+							<option value="0">--请选择三级分类--</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="input-video_is_upload" class="col-sm-2 control-label"><span class="form-required">*</span>是否上传商品视频</label>
+					<div class="col-md-6 col-sm-10">
+						<label class="radio-inline"><input type="radio" name="video_is_upload" value="0" checked>否</label>
+						<label class="radio-inline"><input type="radio" name="video_is_upload" value="1" >是</label>
+						<p class="help-block">如果选择不上传视频的话，下面的视频文件不用选择,即便选择了，也不做处理</p>
+					</div>
+				</div>
+
+
+				<div class="form-group upload_videothumb_area">
+					<label for="input-video_thumb" class="col-sm-2 control-label"><span class="form-required"></span>视频封面</label>
+					<div class="col-md-6 col-sm-10">
+						<input type="hidden" name="video_thumb" id="video_thumb" value="">
+						<a href="javascript:uploadOneImage('图片上传','#video_thumb');">
+							<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="video_thumb-preview" style="cursor: pointer;max-width:150px;max-height:150px;"/>
+						</a>
+						<input type="button" class="btn btn-sm btn-cancel-video_thumb" value="取消图片">
+						<p class="help-block">建议尺寸：200px * 200px</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="input-href" class="col-sm-2 control-label"><span class="form-required"></span>上传视频</label>
+					<div class="col-md-6 col-sm-10">
+						<input class="form-control" id="js-file-input" type="text" name="video_url" style="width: 300px;display: inline-block;" title="视频文件地址" >
+
+	                    <a href="javascript:uploadOne('文件上传','#js-file-input','video');">上传文件</a>MP4格式
+	                   	<p class="help-block">可填写视频链接 [只能包含字母,数字,下划线,不能包含*#$等特殊字符]，可直接上传视频获取链接</p> 
+					</div>
+					
+				</div>
+
+				<!-- 商品缩略图 -->
+				<div class="form-group">
+					<label for="input-thumbs" class="col-sm-2 control-label"><span class="form-required">*</span>商品缩略图
+						<p class="help-block">最多可上传9张图片</p>
+					</label>
+					<div class="goods_thumbs_area">
+						<div class="col-md-6 col-sm-10 goods_thumbs_list">
+							<input type="hidden" name="thumbs[]" id="thumbs1" value="">
+							<a href="javascript:uploadOneImage('图片上传','#thumbs1');">
+								<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="thumbs1-preview"/>
+							</a>
+							<input type="button" class="btn btn-sm btn-cancel-thumbs1" value="取消图片">
+						</div>
+						
+						<div class="col-md-6 col-sm-10 goods_thumbs_list" style="padding-top: 65px;">
+							<input type="button" class="btn btn-sm btn-cancel-thumbs1" id="addGoodsThumbs" value="添加新缩略图" />(<span id="goods_thumbs_nums">1</span>/9)
+						</div>
+
+					</div>
+
+				</div>
+
+
+		        <div class="form-group">
+					<label for="input-content" class="col-sm-2 control-label"><span class="form-required">*</span>商品详情:</label>
+					<div class="col-md-6 col-sm-10">
+						<textarea class="form-control" style="height: 200px;" name="content" placeholder="请填写细节说明、规格、搭配、购买须知等多方面描述商品的详情，不超过300个字"></textarea>
+					</div>
+				</div>
+				<!-- 商品详情图集 -->
+				<div class="form-group">
+					<label for="input-pictures" class="col-sm-2 control-label"><span class="form-required"></span>商品详情图集
+						<p class="help-block">最多可上传20张图片</p>
+					</label>
+					<div class="goods_thumbs_area">
+						<div class="col-md-6 col-sm-10 goods_thumbs_list">
+							<input type="hidden" name="pictures[]" id="pictures1" value="">
+							<a href="javascript:uploadOneImage('图片上传','#pictures1');">
+								<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="pictures1-preview"/>
+							</a>
+							<input type="button" class="btn btn-sm btn-cancel-pictures1" value="取消图片">
+						</div>
+						
+						<div class="col-md-6 col-sm-10 goods_thumbs_list" style="padding-top: 65px;">
+							<input type="button" class="btn btn-sm btn-cancel-pictures1" id="addGoodsPictures" value="添加新详情图" />(<span id="goods_pictures_nums">1</span>/20)
+						</div>
+
+					</div>
+
+				</div>
+
+				<!-- 规格列表 -->
+				<div class="spec_lists">
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><span class="form-required">*</span>商品规格名称:</label>
+						<div class="col-md-6 col-sm-10">
+							<input type="text" class="form-control" name="spec_name[]" placeholder="15字以内">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><span class="form-required">*</span>商品规格库存:</label>
+						<div class="col-md-6 col-sm-10">
+							<input type="text" class="form-control" name="spec_num[]" placeholder="1-9999999之间的整数">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label"><span class="form-required">*</span>商品规格单价(元):</label>
+						<div class="col-md-6 col-sm-10">
+							<input type="text" class="form-control" name="spec_price[]" placeholder="1-99999999之间的数字">
+						</div>
+					</div>
+
+					<!-- 商品规格图 -->
+
+					<div class="form-group">
+	                    <label for="input-apk_ewm" class="col-sm-2 control-label"><span class="form-required">*</span>规格封面</label>
+	                    <div class="col-md-6 col-sm-10">
+	                        <input type="hidden" name="spec_thumb[]" id="spec_thumb1" value="">
+	                        <a href="javascript:uploadOneImage('图片上传','#spec_thumb1');">
+	                            <img src="__TMPL__/public/assets/images/default-thumbnail.png" id="spec_thumb1-preview" style="width: 150px;height: 150px;" />
+	                        </a>
+	                        <input type="button" class="btn btn-sm btn-cancel-spec_thumb1" value="取消图片">
+	                        <input type="button" class="btn btn-sm btn-cancel-spec_thumb1 spec_lists_del" id="spec_lists_add" value="添加规格">
+	                    </div>
+	                </div>
+
+	            </div>
+
+				<div class="form-group">
+					<label for="input-postage" class="col-sm-2 control-label"><span class="form-required">*</span>商品邮费:</label>
+					<div class="col-md-6 col-sm-10">
+						<input type="text" class="form-control" id="input-postage" name="postage" placeholder="0-99999之间的数字">
+						<p class="help-block">请填写数字，包邮请填写0</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="input-commission" class="col-sm-2 control-label"><span class="form-required">*</span>主播代售获取佣金:</label>
+					<div class="col-md-6 col-sm-10">
+						<input type="text" class="form-control" id="input-commission" name="commission" placeholder="0-99999之间的数字">元
+						<p class="help-block">请填写数字</p>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="input-status" class="col-sm-2 control-label"><span class="form-required">*</span>商品状态:</label>
+					<div class="col-md-6 col-sm-10">
+						<label class="radio-inline"><input type="radio" name="status" value="0" >不发布</label>
+						<label class="radio-inline"><input type="radio" name="status" value="1" checked="checked">发布</label>
+					</div>
+				</div>
+
+
+
+            <div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<input type="hidden" name="id" />
+					
+						<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+					
+				</div>
+			</div>
+
+		</form>
+	</div>
+
+    <script src="__STATIC__/js/admin.js"></script>
+    <script src="__STATIC__/js/layer/layer.js"></script>
+    <script type="text/javascript">
+
+    	var thumbs_id=1;
+		var thumbs_num=1;
+		var thumbs_total=9;
+
+		var pictures_id=1;
+		var pictures_num=1;
+		var pictures_total=20;
+
+		var spec_lists_id=1;
+
+    	$(function(){
+
+    		var one_classid=0;
+    		var two_classid=0;
+    		var three_classid=0;
+
+    		//一级商品分类切换时，更新二级商品分类
+    		$("#one_class").change(function(){
+    			one_classid=$(this).val();
+    			if(!one_classid){
+    				$("#two_class").html("<option value='0'>--请选择二级分类--</option>");
+    				$("#three_class").html("<option value='0'>--请选择三级分类--</option>");
+    				return;
+    			}
+    			$.ajax({
+		             type: "post",
+		             url: "/Admin/Shopgoods/getTwoClassLists",
+		             data: {one_classid:one_classid,type:0},
+		             dataType: "json",
+		             success: function(data){
+                        var code=data.code;
+                        var msg=data.msg;
+                        var info=data.info;
+                        if(code!=0){
+                        	layer.msg(msg);
+                        	return;
+                        }
+
+                        $("#two_class").html("<option value='0'>--请选择二级分类--</option>");
+
+                        var str='';
+                        for(var i=0;i<info.length;i++){
+                        	str+='<option value="'+info[i]['gc_id']+'">'+info[i]['gc_name']+'</option>';
+                        }
+                        $("#two_class").append(str);
+                        
+                      }
+		        });
+    		});
+
+    		//二级商品分类切换时，更新三级商品分类
+    		$("#two_class").on('change',function(){
+    			two_classid=$(this).val();
+    			if(!two_classid){
+    				$("#three_class").html("<option value='0'>--请选择三级分类--</option>");
+    				return;
+    			}
+
+    			$.ajax({
+		             type: "post",
+		             url: "/Admin/Shopgoods/getThreeClassLists",
+		             data: {two_classid:two_classid,type:0},
+		             dataType: "json",
+		             success: function(data){
+                        var code=data.code;
+                        var msg=data.msg;
+                        var info=data.info;
+                        if(code!=0){
+                        	layer.msg(msg);
+                        	return;
+                        }
+
+                        $("#three_class").html("<option value='0'>--请选择三级分类--</option>");
+
+                        var str='';
+                        for(var i=0;i<info.length;i++){
+                        	str+='<option value="'+info[i]['gc_id']+'">'+info[i]['gc_name']+'</option>';
+                        }
+                        $("#three_class").append(str);
+                        
+                      }
+		        });
+    		});
+
+    		//选择三级分类
+    		$("#three_class").on('change',function(){
+    			three_classid=$(this).val();
+    		});
+
+    		//添加商品缩略图
+    		$("#addGoodsThumbs").click(function(){
+    			thumbs_id++;
+    			thumbs_num++;
+    			var str='<div class="col-md-6 col-sm-10 goods_thumbs_list" id="goods_thumbs_list'+thumbs_id+'">\
+							<input type="hidden" name="thumbs[]" id="thumbs'+thumbs_id+'" value="">\
+							<a href="javascript:uploadOneImage(\'图片上传\',\'#thumbs'+thumbs_id+'\');">\
+								<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="thumbs'+thumbs_id+'-preview"/>\
+							</a>\
+							<p class="goods_thumbs_list_button">\
+							<!--<input type="button" class="btn btn-sm btn-cancel-thumbs'+thumbs_id+'" value="取消图片" onclick="cancelthums('+thumbs_id+')">-->\
+							<input type="button" data-thumbsid="'+thumbs_id+'" class="thumbs_del btn btn-sm btn-cancel-thumbs'+thumbs_id+'" onclick="delthumbs('+thumbs_id+')" value="删除">\
+							</p>\
+							<div class="clearboth"></div>\
+						</div>';
+				//console.log(str);
+				$("#goods_thumbs_nums").html(thumbs_num);
+				$(this).parent().before(str);
+				if(thumbs_num==thumbs_total){
+					$(this).parent().css("display","none");
+				}
+    		});
+
+
+    		//添加商品详情图
+    		$("#addGoodsPictures").click(function(){
+    			pictures_id++;
+    			pictures_num++;
+    			var str='<div class="col-md-6 col-sm-10 goods_thumbs_list" id="goods_pictures_list'+pictures_id+'">\
+							<input type="hidden" name="pictures[]" id="pictures'+pictures_id+'" value="">\
+							<a href="javascript:uploadOneImage(\'图片上传\',\'#pictures'+pictures_id+'\');">\
+								<img src="__TMPL__/public/assets/images/default-thumbnail.png" id="pictures'+pictures_id+'-preview"/>\
+							</a>\
+							<p class="goods_thumbs_list_button">\
+							<!--<input type="button" class="btn btn-sm btn-cancel-pictures'+pictures_id+'" value="取消图片" onclick="cancelpictures('+pictures_id+')">-->\
+							<input type="button" data-thumbsid="'+pictures_id+'" class="thumbs_del btn btn-sm btn-cancel-pictures'+pictures_id+'" onclick="delpictures('+pictures_id+')" value="删除">\
+							</p>\
+							<div class="clearboth"></div>\
+						</div>';
+				//console.log(str);
+				$("#goods_pictures_nums").html(pictures_num);
+				$(this).parent().before(str);
+				if(pictures_num==pictures_total){
+					$(this).parent().css("display","none");
+				}
+    		});
+
+
+    		//添加规格
+    		
+    		$("#spec_lists_add").click(function(){
+    			spec_lists_id++;
+    			var str='<div id="spec_lists'+spec_lists_id+'">\
+	                	<div class="form-group">\
+							<label class="col-sm-2 control-label"><span class="form-required">*</span>商品规格名称:</label>\
+							<div class="col-md-6 col-sm-10">\
+								<input type="text" class="form-control" name="spec_name[]" placeholder="15字以内">\
+							</div>\
+						</div>\
+						<div class="form-group">\
+							<label class="col-sm-2 control-label"><span class="form-required">*</span>商品规格库存:</label>\
+							<div class="col-md-6 col-sm-10">\
+								<input type="text" class="form-control" name="spec_num[]" placeholder="1-9999999之间的整数">\
+							</div>\
+						</div>\
+						<div class="form-group">\
+							<label class="col-sm-2 control-label"><span class="form-required">*</span>商品规格单价(元):</label>\
+							<div class="col-md-6 col-sm-10">\
+								<input type="text" class="form-control" name="spec_price[]" placeholder="1-99999999之间的数字">\
+							</div>\
+						</div>\
+						<div class="form-group">\
+		                    <label for="input-apk_ewm" class="col-sm-2 control-label"><span class="form-required">*</span>规格封面</label>\
+		                    <div class="col-md-6 col-sm-10">\
+		                        <input type="hidden" name="spec_thumb[]" id="spec_thumb'+spec_lists_id+'" value="">\
+		                        <a href="javascript:uploadOneImage(\'图片上传\',\'#spec_thumb'+spec_lists_id+'\');">\
+		                            <img src="__TMPL__/public/assets/images/default-thumbnail.png" id="spec_thumb'+spec_lists_id+'-preview" style="width: 150px;height: 150px;" />\
+		                        </a>\
+		                        <input type="button" class="btn btn-sm btn-cancel-spec_thumb'+spec_lists_id+'" value="取消图片">\
+		                        <input type="button" class="btn btn-sm spec_lists_del" onclick="specListDel('+spec_lists_id+')" value="删除规格">\
+		                    </div>\
+		                </div>\
+	                </div>';
+
+	            $(".spec_lists").append(str); 
+    		});
+
+    		
+    	});
+		
+		//删除商品缩略图
+		function delthumbs(thumbs_id){
+			//console.log(thumbs_id);
+			$("#goods_thumbs_list"+thumbs_id).remove();
+			thumbs_num--;
+			$("#goods_thumbs_nums").html(thumbs_num);
+			if(thumbs_num<thumbs_total){
+				$("#addGoodsThumbs").parent().css("display","block");
+			}
+		}
+
+		//删除商品详情图
+		function delpictures(pictures_id){
+			//console.log(pictures_id);
+			$("#goods_pictures_list"+pictures_id).remove();
+			pictures_num--;
+			$("#goods_pictures_nums").html(pictures_num);
+			if(pictures_num<pictures_total){
+				$("#addGoodsPictures").parent().css("display","block");
+			}
+		}
+
+		//取消缩略图图片
+		/*function cancelthums(thumbs_id){
+			$('#thumbs'+thumbs_id+'-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+			$('#thumbs'+thumbs_id).val('');
+		}*/
+
+		//取消详情图集图片
+		/*function cancelpictures(pictures_id){
+			$('#pictures'+pictures_id+'-preview').attr('src', '__TMPL__/public/assets/images/default-thumbnail.png');
+			$('#pictures'+pictures_id).val('');
+		}*/
+
+		//删除商品规格
+		function specListDel(spec_list_id){
+			$("#spec_lists"+spec_list_id).remove();
+		}
+
+    </script>
+    
+
+</body>
+</html>

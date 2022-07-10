@@ -1,0 +1,43 @@
+<include file="public@header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:url('Goodsorder/index')}">店铺商品订单列表</a></li>
+			<li class="active"><a >填写物流</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form margin-top-20" action="{:url('Goodsorder/setexpressPost')}">
+
+            <div class="form-group">
+				<label for="input-touid" class="col-sm-2 control-label"><span class="form-required">*</span>物流公司</label>
+				<div class="col-md-6 col-sm-10">
+					<select name="express_id">
+						<option value="0">--请选择物流公司--</option>
+						<volist name="express_list" id="vo">
+							<option value="{$vo['id']}">{$vo['express_name']}</option>
+						</volist>
+					</select>
+				</div>
+			</div>
+            
+            <div class="form-group">
+				<label for="input-express_number" class="col-sm-2 control-label"><span class="form-required">*</span>物流单号</label>
+				<div class="col-md-6 col-sm-10">
+					<input type="text" class="form-control" id="input-express_number" name="express_number" />
+					<p class="help-block">请正确填写物流单号</p>
+				</div>
+			</div>
+            
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-10">
+					<input type="hidden" class="form-control" name="orderid" value="{$orderid}" />
+					<button type="submit" class="btn btn-primary js-ajax-submit">{:lang('ADD')}</button>
+					<a class="btn btn-default" href="javascript:history.back(-1);">{:lang('BACK')}</a>
+				</div>
+			</div>
+            
+		</form>
+	</div>
+	<script src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
